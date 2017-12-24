@@ -28,8 +28,8 @@ def main():
             longest = i
             longest_value = count
 
-    print longest
-    print longest_value
+    print(longest)
+    print(longest_value)
 
 
 def get_primes(maximum):

@@ -14,7 +14,7 @@ def main():
     result *= int(string[10000])
     result *= int(string[100000])
     result *= int(string[1000000])
-    print result
+    print(result)
 
 
 main()

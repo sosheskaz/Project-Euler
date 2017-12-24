@@ -22,10 +22,10 @@ def main():
 
         if has_all_digits:
             total_found += 1
-            print "base: " + str(base_num) + ", n: " + str(i) + ", Pandigital: " + str(pandigital)
+            print("base: " + str(base_num) + ", n: " + str(i) + ", Pandigital: " + str(pandigital))
 
         base_num += 1
 
-    print "found: " + str(total_found)
+    print("found: " + str(total_found))
 
 main()
