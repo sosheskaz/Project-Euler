@@ -29,7 +29,7 @@ def get_prime_family(of_prime):
             for index in combo:
                 test_str[index] = replace_digit
             asint = int(''.join(test_str))
-            if len(str(asint)) < len(str(of_prime)):
+            if asint < of_prime:
                 continue
             if isprime(asint):
                 cur_family.add(asint)
