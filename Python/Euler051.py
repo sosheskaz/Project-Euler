@@ -12,7 +12,7 @@ def main():
             answer = family
             break
     print()
-    print(sorted(answer))
+    print(sorted(answer)[0])
 
 
 def get_prime_family(of_prime):
