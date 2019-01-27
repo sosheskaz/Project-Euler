@@ -5,7 +5,6 @@ Function main() {
 }
 
 Function primeFactors([Int64]$ofLong) {
-
   While ($ofLong % 2 -eq 0) {
     $ofLong /= 2
     Write-Output 2
