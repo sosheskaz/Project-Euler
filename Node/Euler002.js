@@ -1,12 +1,12 @@
-#!/usr/bin/env groovy
+#!/usr/bin/env node
 
-void main() {
-  int sum = 0
+function main() {
+  let sum = 0
 
-  int previous = 1
-  int current = 1
+  let previous = 1
+  let current = 1
   while (current < 4000000) {
-    int oldPrev = previous
+    let oldPrev = previous
     previous = current
     current = previous + oldPrev
 
@@ -15,7 +15,7 @@ void main() {
     }
   }
 
-  println sum
+  console.log(sum)
 }
 
 main()
