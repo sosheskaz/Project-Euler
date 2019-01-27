@@ -7,10 +7,9 @@ function main() {
   }
 
   for (let i = 5; i < 1000; i += 5) {
-    if (i % 3 == 0) {
-      continue
+    if (i % 3 != 0) {
+      s += i
     }
-    s += i
   }
 
   console.log(s)
