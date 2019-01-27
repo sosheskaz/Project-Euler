@@ -2,6 +2,7 @@
 number=$1
 
 default="Not Found!"
+cval=$default
 goval=$default
 groovyval=$default
 nodeval=$default
@@ -12,6 +13,7 @@ swiftval=$default
 
 fname="Euler$number"
 
+cfile="C/$fname.c"
 gofile="Go/$fname.go"
 groovyfile="Groovy/$fname.groovy"
 nodefile="Node/$fname.js"
@@ -22,6 +24,7 @@ swiftfile="Swift/$fname.swift"
 
 chmod +x "$groovyfile" "$pythonfile" "$rubyfile" "$swiftfile" "$pwshfile" "$nodefile"> /dev/null 2>/dev/null
 
+if [ -f "$cfile" ]; then gcc $cfile -o C/$fname.o; cval=$(C/$fname.o); fi
 if [ -f "$gofile" ]; then goval=$(go run "$gofile" 2>/dev/null); fi
 if [ -f "$groovyfile" ]; then groovyval=$($groovyfile 2>/dev/null); fi
 if [ -f "$nodefile" ]; then nodeval=$($nodefile 2>/dev/null); fi
@@ -31,6 +34,7 @@ if [ -f "$rubyfile" ]; then rubyval=$($rubyfile 2>/dev/null); fi
 if [ -f "$swiftfile" ]; then swiftval=$($swiftfile 2>/dev/null); fi
 
 echo "
+C:          $cval
 Go:         $goval
 Groovy:     $groovyval
 Node.js:    $nodeval
