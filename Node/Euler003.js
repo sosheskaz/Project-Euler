@@ -10,7 +10,7 @@ function* primeFactors(num) {
 
   while (num % 2 == 0) {
     num /= 2
-    factors.add(2)
+    yield 2
   }
 
   for (let i = 3; i <= num; i += 2) {

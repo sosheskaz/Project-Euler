@@ -15,7 +15,7 @@ func primeFactors(of: Int) -> [Int] {
     factors.append(2)
   }
 
-  for i in stride(from: 3, to: num, by: 2) {
+  for i in stride(from: 3, to: num+1, by: 2) {
     if (num == 1) {
       break
     }
