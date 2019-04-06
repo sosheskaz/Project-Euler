@@ -8,10 +8,11 @@ from operator import mul
 
 
 def main():
+    n = 20
     # Sympy is concise and efficient, but the front-loading cost is much greater
     # than the performance increase for n = 20.
-    # primes = sieve.primerange(0, 20)
-    primes = takewhile(lambda x: x < 20, get_primes())
+    # primes = sieve.primerange(0, n)
+    primes = takewhile(lambda x: x <= n, get_primes())
     prime_pow = lambda prime, ceiling: prime ** int(log(ceiling, prime))
     result = reduce(mul, (prime_pow(prime, 20) for prime in primes))
     print(result)
