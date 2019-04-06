@@ -42,7 +42,7 @@ class ShebangError(Exception):
 
 class ShebangStrategy(ProfileStrategy):
     name = 'Shebang'
-    extensions = {'.groovy', '.js', '.py', '.rb', '.swift'}
+    extensions = {'.groovy', '.js', '.py', '.rb'}
 
     def _has_shebang(self, f):
         with open(f) as fd:
@@ -89,13 +89,6 @@ class LazyRubyStrategy(ShebangStrategy):
     extensions = {'.rb'}
 
 
-class LazySwiftStrategy(ShebangStrategy):
-    name = 'Swift (Interpreted)'
-    extensions = {'.swift'}
-    # Swift has slow spinup too.
-    iterations = 5
-
-
 class CompiledGoStrategy(ProfileStrategy):
     name = 'Go (Compiled)'
     extensions = {'.go'}
@@ -123,7 +116,6 @@ STRATEGIES = [
     LazyJavaScriptStrategy(),
     LazyPythonStrategy(),
     LazyRubyStrategy(),
-    LazySwiftStrategy(),
     CompiledGoStrategy()
 ]
 
