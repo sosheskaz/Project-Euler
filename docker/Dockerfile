@@ -7,7 +7,7 @@ ENV PATH /usr/local/groovy/bin:$HOME/.rbenv/bin:$HOME/.rbenv/plugins/ruby-build/
 # Easy stuff and pre-reqs
 RUN apk -U add --no-cache git make musl-dev go nodejs npm python3 bash wget curl \
     vim build-base readline-dev openssl-dev zlib-dev linux-headers imagemagick-dev \
-    libffi-dev
+    libffi-dev hwinfo
 
 # Ruby
 ARG vRuby=2.6.0
@@ -28,6 +28,6 @@ RUN apk add --no-cache openjdk8 \
     && rm apache-groovy-binary-${vGroovy}.zip
 
 # Packages
-RUN python3 -m pip install tqdm joblib sympy
+RUN python3 -m pip install tqdm joblib sympy pyyaml
 
 ENTRYPOINT [ "bash" ]
