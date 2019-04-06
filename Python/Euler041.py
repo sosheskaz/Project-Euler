@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import sympy
 from tqdm import tqdm
 

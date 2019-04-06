@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 def main():
     s = 0
     for j in range(1, 1001):

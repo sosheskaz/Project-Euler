@@ -1,9 +1,9 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 from __future__ import print_function
 
 
 def main():
-    s = sum((range(3, 1000, 3) + [i for i in range(5, 1000, 5) if i % 3]))
+    s = sum(range(3, 1000, 3)) + sum(i for i in range(5, 1000, 5) if i % 3)
     print(s)
 
 

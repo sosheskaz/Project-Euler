@@ -1,0 +1,11 @@
+#!/bin/sh
+# This may take a long time to run.
+mkdir -p profiles
+python3 perfprofile/perfprofile.py \
+    Go/Euler*.go \
+    Groovy/Euler*.groovy \
+    Node/Euler*.js \
+    Python/Euler00*.py \
+    Ruby/Euler*.rb \
+    Swift/Euler*.swift \
+    -o profiles/perfprofile.json profiles/perfprofile.yml profiles/perfprofile.csv profiles/perfprofile.md
