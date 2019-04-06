@@ -9,3 +9,5 @@ python3 perfprofile/perfprofile.py \
     Ruby/Euler*.rb \
     Swift/Euler*.swift \
     -o profiles/perfprofile.json profiles/perfprofile.yml profiles/perfprofile.csv profiles/perfprofile.md
+
+hwinfo --short --cpu --gfxcard --netcard > profiles/hwinfo.txt
