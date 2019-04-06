@@ -66,7 +66,7 @@ def output_yaml(results, outfile, **kwargs):
 
 
 def output_csv(results, outfile):
-    headers = ['Problem'] + list(chain.from_iterable([problem.keys() for problem in results.values()]))
+    headers = ['Problem'] + sorted(set(chain.from_iterable(problem.keys() for problem in results.values())))
     with open(outfile, 'w') as csvfile:
         writer = csv.DictWriter(csvfile, headers)
         writer.writeheader()
@@ -77,7 +77,7 @@ def output_csv(results, outfile):
 
 
 def output_markdown(results, outfile):
-    headers = ['Problem'] + list(chain.from_iterable([problem.keys() for problem in results.values()]))
+    headers = ['Problem'] + sorted({chain.from_iterable(problem.keys() for problem in results.values())})
     with open(outfile, 'w') as csvfile:
         writer = csv.DictWriter(csvfile, headers, delimiter='|')
         writer.writeheader()
