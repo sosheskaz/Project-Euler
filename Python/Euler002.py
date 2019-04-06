@@ -5,7 +5,7 @@ from itertools import takewhile
 
 def main():
     fibs = fibonacci()
-    evens = (fib for fib in fibs if not fib % 2)
+    evens = (fib for fib in fibs if fib % 2 is 0)
     under_4m = takewhile(lambda x: x < 4000000, evens)
     print(sum(under_4m))
 
