@@ -14,7 +14,7 @@ def main():
     # primes = sieve.primerange(0, n)
     primes = takewhile(lambda x: x <= n, get_primes())
     prime_pow = lambda prime, ceiling: prime ** int(log(ceiling, prime))
-    result = reduce(mul, (prime_pow(prime, 20) for prime in primes))
+    result = reduce(mul, (prime_pow(prime, n) for prime in primes))
     print(result)
 
 
