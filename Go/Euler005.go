@@ -1,51 +1,57 @@
 package main
 
-import "fmt"
+import (
+	"container/list"
+	"fmt"
+	"math"
+)
 
 func main() {
-	// Mapping of prime factor : number of times it's a factor
-	intSet := make(map[int]int)
-	for i := 2; i <= 20; i++ {
-		tmpSet := make(map[int]int)
-		for _, factor := range primeFactors(i) {
-			if _, ok := tmpSet[factor]; ok {
-				tmpSet[factor]++
-			} else {
-				tmpSet[factor] = 1
-			}
-			if tmpSet[factor] > intSet[factor] {
-				intSet[factor] = tmpSet[factor]
-			}
-		}
+	const max = 20
+
+	// We need this multiple times later. Pre-calculate it.
+	const maxFloat = float64(max)
+
+	primeList := primes(max)
+	product := 1
+
+	for prime := primeList.Front(); prime != nil; prime = prime.Next() {
+		// ln(a) / ln(b) is equivalent to log(a) base b.
+		val := float64(prime.Value.(int))
+
+		numer := math.Log(maxFloat)
+		denom := math.Log(val)
+		pow := math.Floor(numer / denom)
+
+		product *= int(math.Pow(val, pow))
 	}
 
-	product := 1
-	for prime, frequency := range intSet {
-		for i := 0; i < frequency; i++ {
-			product *= prime
-		}
-	}
 	fmt.Println(product)
 }
 
-func primeFactors(ofNumber int) []int {
-	var factors []int
-
-	for ofNumber%2 == 0 {
-		ofNumber /= 2
-		factors = append(factors, 2)
+func primes(upTo int) *list.List {
+	primeList := list.New()
+	if upTo < 2 {
+		fmt.Println("skipping")
+		return primeList
 	}
 
-	for i := 3; i <= ofNumber; i += 2 {
-		if ofNumber == 1 {
-			break
+	primeList.PushBack(2)
+
+	for i := 3; i < upTo; i += 2 {
+		var isPrime bool = true
+
+		for prime := primeList.Front(); prime != nil; prime = prime.Next() {
+			if i % prime.Value.(int) == 0 {
+				isPrime = false
+				break
+			}
 		}
 
-		for ofNumber%i == 0 {
-			ofNumber /= i
-			factors = append(factors, i)
+		if isPrime {
+			primeList.PushBack(i)
 		}
 	}
 
-	return factors
+	return primeList
 }

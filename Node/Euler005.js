@@ -1,49 +1,41 @@
 #!/usr/bin/env node
+const generators = require("./generators.js")
+
 
 function main() {
-  var frequencies = {}
-  for (let i = 2; i <= 20; i++) {
-    var tmpFrequencies = {}
-    for (let factor of primeFactors(i)) {
-      if (!tmpFrequencies[factor]) {
-        tmpFrequencies[factor] = 1;
-      } else {
-        tmpFrequencies[factor]++;
-      }
-    }
+  const max = 20
 
-    Object.keys(tmpFrequencies)
-      .filter((key) => {
-        return frequencies[key] === undefined || tmpFrequencies[key] > frequencies[key]
-      })
-      .forEach((key) => {
-        return frequencies[key] = tmpFrequencies[key]
-      });
-  }
-
-  var product = 1
-  Object.keys(frequencies).forEach(function(factor) {
-    for (let i = 0; i < frequencies[factor]; i++) {
-      product *= factor;
-    }
+  // avoid callback hell 🔥
+  var walker = primes()
+  walker = generators.takeWhile(walker, (prime) => { return prime < max; });
+  walker = generators.map(walker, (prime) => {
+    // ln(a) / ln(b) is equivalent to log(a) base b.
+    let numer = Math.log(max);
+    let denom = Math.log(prime);
+    let subProduct = Math.pow(prime, Math.floor(numer / denom));
+    return subProduct;
   })
-  console.log(product);
+  let product = generators.reduce(walker, 1, (accumulator, item) => { return accumulator * item; })
+
+  console.log(product)
 }
 
-function* primeFactors(num) {
-  while (num % 2 == 0) {
-    yield 2;
-    num /= 2;
+// Array has map, but generators don't.
+function* map(fn, xs) {
+  for (let x of xs) {
+    yield fn(x);
   }
+}
 
-  for (let i = 3; i <= num; i += 2) {
-    if (num == 1) {
-      break;
-    }
+function* primes() {
+  primeList = []
 
-    while (num % i == 0) {
-      num /= i;
+  yield 2;
+
+  for (let i = 3; true; i += 2) {
+    if (primeList.every((prime) => { return i % prime != 0})) {
       yield i;
+      primeList.push(i);
     }
   }
 }

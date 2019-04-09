@@ -1,38 +1,24 @@
 #!/usr/bin/env ruby
 
 def main
-  factorizations = (2..21).map { |n| prime_factors(n).to_a }
-  frequencies = {}
-  for factorization in factorizations
-    tmp_frequencies = factorization.group_by { |x| x }
-    tmp_frequencies.each { |factor, freq|
-      freq = freq.length
-      if (not frequencies.key?(factor)) or (freq > frequencies[factor])
-        frequencies[factor] = freq
-      end
-    }
-  end
-
-  sub_products = frequencies.map { |factor, freq| factor ** freq }
-  product = sub_products.reduce(:*)
-  puts product
+  max = 20
+  p = primes
+    .take_while { |prime| prime <= 20 }
+    .map { |prime| prime ** Math.log(max, prime).floor}
+    .reduce(1, :*)
+  puts p
 end
 
-def prime_factors(of_number)
+def primes
   Enumerator.new do |enum|
-    while of_number % 2 == 0
-      of_number /= 2
-      enum.yield 2
-    end
+    prime_list = []
 
-    for i in (3..of_number).step(2)
-      if of_number == 1
-        break
-      end
+    enum.yield 2
 
-      while of_number % i == 0
-        of_number /= i
+    for i in (3..).step(2)
+      if prime_list.all? { |prime| i % prime != 0 }
         enum.yield i
+        prime_list.push(i)
       end
     end
   end
