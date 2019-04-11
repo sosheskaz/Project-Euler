@@ -21,15 +21,15 @@ ARG vGroovy=2.5.6
 ARG vGroovyServ=1.2.0
 RUN apk add --no-cache openjdk8 maven \
     && wget https://bintray.com/artifact/download/groovy/maven/apache-groovy-binary-${vGroovy}.zip \
-    && mkdir -p /usr/local \
+    && mkdir -p /opt/groovy \
     && unzip apache-groovy-binary-${vGroovy}.zip \
-    && mv groovy-${vGroovy} /usr/local/groovy \
-  && rm apache-groovy-binary-${vGroovy}.zip \
-  && wget https://github.com/facebook/nailgun/releases/download/nailgun-all-v1.0.0/nailgun-server-1.0.0-SNAPSHOT.jar -O "/opt/nailgun/nailgun-server.jar" \
-  && echo "#!/bin/bash\njava -cp /opt/nailgun/nailgun-server.jar com.facebook.nailgun.NGServer" > /usr/bin/ng-server
+    && mv groovy-${vGroovy} /opt/groovy \
+    && rm apache-groovy-binary-${vGroovy}.zip \
+    && wget https://github.com/facebook/nailgun/releases/download/nailgun-all-v1.0.0/nailgun-server-1.0.0-SNAPSHOT.jar -O "/opt/nailgun/nailgun-server.jar" \
+    && echo "#!/bin/bash\njava -cp '/opt/nailgun/*:/opt/groovy/lib/*' com.facebook.nailgun.NGServer" > /usr/bin/ng-server
 ENV JAVA_HOME=/usr/lib/jvm/java-1.8-openjdk
-ENV GROOVY_HOME /usr/local/groovy
-ENV PATH /usr/local/groovy/bin:$PATH
+ENV GROOVY_HOME /opt/groovy
+ENV PATH /opt/groovy/bin:$PATH
 
 # Packages
 RUN python3 -m pip install tqdm joblib sympy pyyaml
