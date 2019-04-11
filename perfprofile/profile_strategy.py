@@ -1,7 +1,7 @@
 import os
-from time import time
+from time import time, sleep
 import stat
-from subprocess import check_call, call, DEVNULL
+from subprocess import check_call, call, Popen, DEVNULL
 
 
 class ProfileStrategy(object):
@@ -69,20 +69,30 @@ class ShebangStrategy(ProfileStrategy):
 class GroovyDirectStrategy(ShebangStrategy):
     name = 'Groovy (Direct)'
     extensions = {'.groovy', '.gvy', '.gy', '.gsh'}
+    iterations = 3
+    
 
-
-class GroovyServStrategy(ProfileStrategy):
-    name = 'Groovy (GroovyServ)'
+class GroovyNailgunStrategy(ProfileStrategy):
+    name = 'Groovy (NailGun)'
     extensions = {'.groovy', '.gvy', '.gy', '.gsh'}
 
+    _ng_proc = None
+
     def setup_for(self, f):
-        check_call(['groovyserver'], stdout=DEVNULL, stderr=DEVNULL)
+        self._ng_proc = Popen(['ng-server'], stdout=DEVNULL, stderr=DEVNULL)
+        
+        retries = 9
+        delay = 0.1
+        while call(['ng-groovy', f], stdout=DEVNULL, stderr=DEVNULL) != 0 and retries > 0:
+            sleep(delay)  # I know, I know.
+            retries -= 1
 
     def run_file(self, f):
-        check_call(['groovyclient', f], stdout=DEVNULL, stderr=DEVNULL)
+        check_call(['ng-groovy', f], stdout=DEVNULL, stderr=DEVNULL)
 
     def cleanup_for(self, f):
-        check_call(['groovyserver', '-k'], stdout=DEVNULL, stderr=DEVNULL)
+        self._ng_proc.kill()
+        self._ng_proc = None
 
 
 class LazyJavaScriptStrategy(ShebangStrategy):
@@ -107,6 +117,7 @@ class GoStrategy(ProfileStrategy):
 class GoRunStrategy(GoStrategy):
     name = 'Go (Go Run)'
     extensions = {'.go'}
+    iterations = 3
 
     def run_file(self, f):
         check_call(['go', 'run', f, *self.golibs], stdout=DEVNULL, stderr=DEVNULL)
@@ -139,7 +150,7 @@ STRATEGIES = [
     LazyPythonStrategy(),
     LazyRubyStrategy(),
     GroovyDirectStrategy(),
-    GroovyServStrategy(),
+    GroovyNailgunStrategy(),
     GoRunStrategy(),
     CompiledGoStrategy()
 ]

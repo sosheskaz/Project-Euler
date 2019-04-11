@@ -1,0 +1,2 @@
+#!/bin/bash
+java -cp '/opt/nailgun/*:/opt/groovy/lib/*' -server com.facebook.nailgun.NGServer

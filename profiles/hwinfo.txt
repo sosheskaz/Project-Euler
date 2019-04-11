@@ -1,0 +1,15 @@
+cpu:
+                       Intel(R) Core(TM) i7-4710MQ CPU @ 2.50GHz, 3275 MHz
+                       Intel(R) Core(TM) i7-4710MQ CPU @ 2.50GHz, 3280 MHz
+                       Intel(R) Core(TM) i7-4710MQ CPU @ 2.50GHz, 3305 MHz
+                       Intel(R) Core(TM) i7-4710MQ CPU @ 2.50GHz, 3309 MHz
+                       Intel(R) Core(TM) i7-4710MQ CPU @ 2.50GHz, 3356 MHz
+                       Intel(R) Core(TM) i7-4710MQ CPU @ 2.50GHz, 2805 MHz
+                       Intel(R) Core(TM) i7-4710MQ CPU @ 2.50GHz, 3371 MHz
+                       Intel(R) Core(TM) i7-4710MQ CPU @ 2.50GHz, 3233 MHz
+graphics card:
+                       Intel 4th Gen Core Processor Integrated Graphics Controller
+                       nVidia GK208GLM [Quadro K610M]
+network:
+                       Intel Ethernet Connection I217-LM
+                       Intel Dual Band Wireless-N 7260
