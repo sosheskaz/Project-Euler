@@ -1,7 +1,7 @@
 import os
 from time import time
 import stat
-from subprocess import check_call, DEVNULL
+from subprocess import check_call, call, DEVNULL
 
 
 class ProfileStrategy(object):
@@ -66,12 +66,23 @@ class ShebangStrategy(ProfileStrategy):
         check_call(os.path.realpath(f), stdout=DEVNULL, stderr=DEVNULL)
 
 
-class LazyGroovyStrategy(ShebangStrategy):
-    name = 'Groovy'
+class GroovyDirectStrategy(ShebangStrategy):
+    name = 'Groovy (Direct)'
     extensions = {'.groovy', '.gvy', '.gy', '.gsh'}
-    # Groovy's massive startup time (to spin up JVM) means that values are
-    # already stable
-    iterations = 3
+
+
+class GroovyServStrategy(ProfileStrategy):
+    name = 'Groovy (GroovyServ)'
+    extensions = {'.groovy', '.gvy', '.gy', '.gsh'}
+
+    def setup_for(self, f):
+        check_call(['groovyserver'], stdout=DEVNULL, stderr=DEVNULL)
+
+    def run_file(self, f):
+        check_call(['groovyclient', f], stdout=DEVNULL, stderr=DEVNULL)
+
+    def cleanup_for(self, f):
+        check_call(['groovyserver', '-k'], stdout=DEVNULL, stderr=DEVNULL)
 
 
 class LazyJavaScriptStrategy(ShebangStrategy):
@@ -89,7 +100,19 @@ class LazyRubyStrategy(ShebangStrategy):
     extensions = {'.rb'}
 
 
-class CompiledGoStrategy(ProfileStrategy):
+class GoStrategy(ProfileStrategy):
+    golibs = ['Go/sieve.go']
+
+
+class GoRunStrategy(GoStrategy):
+    name = 'Go (Go Run)'
+    extensions = {'.go'}
+
+    def run_file(self, f):
+        check_call(['go', 'run', f, *self.golibs], stdout=DEVNULL, stderr=DEVNULL)
+
+
+class CompiledGoStrategy(GoStrategy):
     name = 'Go (Compiled)'
     extensions = {'.go'}
     # Since go is compiled, it is much much faster, so we use more iterations.
@@ -100,7 +123,7 @@ class CompiledGoStrategy(ProfileStrategy):
 
     def setup_for(self, f):
         target = self._target_for(f)
-        check_call(['go', 'build', '-o', target, f])
+        check_call(['go', 'build', '-o', target, f, *self.golibs])
 
     def run_file(self, f):
         target = os.path.realpath(self._target_for(f))
@@ -112,10 +135,12 @@ class CompiledGoStrategy(ProfileStrategy):
             os.remove(target)
 
 STRATEGIES = [
-    LazyGroovyStrategy(),
     LazyJavaScriptStrategy(),
     LazyPythonStrategy(),
     LazyRubyStrategy(),
+    GroovyDirectStrategy(),
+    GroovyServStrategy(),
+    GoRunStrategy(),
     CompiledGoStrategy()
 ]
 

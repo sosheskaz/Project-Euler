@@ -2,7 +2,7 @@ FROM alpine:3.9
 
 ENV GOROOT /usr/lib/go
 ENV GOPATH /go
-ENV PATH /usr/local/groovy/bin:$HOME/.rbenv/bin:$HOME/.rbenv/plugins/ruby-build/bin:/go/bin:$PATH
+ENV PATH /usr/local/groovyserv/bin:/usr/local/groovy/bin:$HOME/.rbenv/bin:$HOME/.rbenv/plugins/ruby-build/bin:/go/bin:$PATH
 
 # Easy stuff and pre-reqs
 RUN apk -U add --no-cache git make musl-dev go nodejs npm python3 bash wget curl \
@@ -18,6 +18,7 @@ RUN git clone git://github.com/sstephenson/rbenv.git .rbenv \
 
 # Groovy
 ARG vGroovy=2.5.6
+ARG vGroovyServ=1.2.0
 ENV JAVA_HOME=/usr/lib/jvm/java-1.8-openjdk
 ENV GROOVY_HOME /usr/local/groovy
 RUN apk add --no-cache openjdk8 \
@@ -25,7 +26,10 @@ RUN apk add --no-cache openjdk8 \
     && mkdir -p /usr/local \
     && unzip apache-groovy-binary-${vGroovy}.zip \
     && mv groovy-${vGroovy} /usr/local/groovy \
-    && rm apache-groovy-binary-${vGroovy}.zip
+    && rm apache-groovy-binary-${vGroovy}.zip \
+    && wget https://bitbucket.org/kobo/groovyserv-mirror/downloads/groovyserv-${vGroovyServ}-bin.zip \
+    && unzip groovyserv-${vGroovyServ}-bin.zip \
+    && mv groovyserv-${vGroovyServ}-bin /usr/local/groovyserv
 
 # Packages
 RUN python3 -m pip install tqdm joblib sympy pyyaml
