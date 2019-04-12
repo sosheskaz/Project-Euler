@@ -177,10 +177,28 @@ class PyPyStrategy(ShebangStrategy):
         return ['pypy3', f]
 
 
+class JythonStrategy(ShebangStrategy):
+    name = 'Jython 2.7 (Nailgun)'
+    extensions = {'.py'}
+    docker_image = 'ericmiller/jython-nailgun:2.7'
+
+    def command_for(self, f):
+        return ['ng-jython', f]
+
+
 class LazyRubyStrategy(ShebangStrategy):
     name = 'Ruby 2.6.0'
     extensions = {'.rb'}
     docker_image = 'ruby:2.6.0-alpine'
+
+
+class JrubyStrategy(ShebangStrategy):
+    name = 'JRuby 9.2 (Nailgun)'
+    extensions = {'.rb'}
+    docker_image = 'ericmiller/jruby-nailgun:9.2'
+
+    def command_for(self, f):
+        return ['ng-jruby', f]
 
 
 class GoStrategy(ProfileStrategy):
