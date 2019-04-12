@@ -4,6 +4,7 @@ import copy
 import csv
 import json
 from itertools import groupby, chain
+from math import floor, log10
 import os
 import sys
 from time import time
@@ -59,7 +60,11 @@ def main():
             print('Finished profiling {} in {} seconds.'.format(problem, elapsed))
 
     print()
-    # print(all_results)
+
+    for breakdown in all_results.values():
+        for strat_name, result in breakdown.items():
+            breakdown[strat_name] = round_to_sig_figs(result, 5)
+
     for outfile in args.outfile:
         print('Writing {}'.format(outfile))
         ext = os.path.splitext(outfile)[1].lower()
@@ -91,9 +96,13 @@ def output_csv(results, outfile):
         writer = csv.DictWriter(csvfile, headers)
         writer.writeheader()
         for problem, results in results.items():
-            to_write = copy.deepcopy(results)
+            to_write = copy.deepcopy([results])
             to_write['Problem'] = problem
             writer.writerow(to_write)
+
+
+def round_to_sig_figs(value, sig_figs):
+    return round(value, -int(floor(log10(abs(value)))) + sig_figs)
 
 
 def output_markdown(results, outfile):
