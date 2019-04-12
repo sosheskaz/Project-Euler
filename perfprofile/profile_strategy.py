@@ -1,4 +1,3 @@
-import getpass
 import os
 from time import time, sleep
 import stat
@@ -29,7 +28,7 @@ class ProfileStrategy(object):
             'detach': True,
             'entrypoint': self.docker_entrypoint,
             'remove': True,
-            'user': getpass.getuser()
+            'user': os.getuid()
         }
 
     docker_exec_args = {
