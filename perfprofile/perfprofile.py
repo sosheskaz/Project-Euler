@@ -24,21 +24,39 @@ def main():
     problems = groupby(files_ordered,
                        key=lambda f: os.path.splitext(os.path.basename(f))[0])
     all_results = {}
-    for problem, files in problems:
-        print('Profiling {}'.format(problem))
-        start = time()
-        all_results[problem] = {}
-        for f in files:
-            strategies = list(profile_strategy.strategies_for(f))
-            print('\tProfiling {} using strategies {}'.format(f, [s.name for s in strategies]))
-            results = {
-                strat.name: strat.get_perf_profile(f)
-                for strat in strategies
-            }
-            all_results[problem].update(results)
-        end = time()
-        elapsed = int(end - start)
-        print('Finished profiling {} in {} seconds.'.format(problem, elapsed))
+
+    print('Bootstrapping docker containers...')
+    with profile_strategy.LazyJavaScriptStrategy() as js, \
+        profile_strategy.LazyPythonStrategy() as py, \
+        profile_strategy.LazyRubyStrategy() as rb, \
+        profile_strategy.GroovyDirectStrategy() as grv, \
+        profile_strategy.GroovyNailgunStrategy() as grvng, \
+        profile_strategy.GoRunStrategy() as gor, \
+        profile_strategy.CompiledGoStrategy() as goc:
+
+        strategies = [js, py, rb, grv, grvng, gor, goc]
+
+        for problem, files in problems:
+            print('Profiling {}'.format(problem))
+            start = time()
+            all_results[problem] = {}
+            for f in files:
+                ext = os.path.splitext(f)[1]
+                strats_for_file = [
+                    s for s in strategies
+                    if s.matches_file(f)
+                ]
+                strat_names = [s.name for s in strats_for_file]
+
+                print('\tProfiling {} using strategies {}'.format(f, strat_names))
+                results = {
+                    strat.name: strat.get_perf_profile(f)
+                    for strat in strats_for_file
+                }
+                all_results[problem].update(results)
+            end = time()
+            elapsed = int(end - start)
+            print('Finished profiling {} in {} seconds.'.format(problem, elapsed))
 
     print()
     # print(all_results)
