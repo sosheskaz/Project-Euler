@@ -29,13 +29,12 @@ def main():
     print('Bootstrapping docker containers...')
     with profile_strategy.LazyJavaScriptStrategy() as js, \
         profile_strategy.LazyPythonStrategy() as py, \
+        profile_strategy.PyPyStrategy() as pypy, \
         profile_strategy.LazyRubyStrategy() as rb, \
-        profile_strategy.GroovyDirectStrategy() as grv, \
         profile_strategy.GroovyNailgunStrategy() as grvng, \
-        profile_strategy.GoRunStrategy() as gor, \
         profile_strategy.CompiledGoStrategy() as goc:
 
-        strategies = [js, py, rb, grv, grvng, gor, goc]
+        strategies = [js, py, pypy, rb, grvng, goc]
 
         for problem, files in problems:
             print('Profiling {}'.format(problem))
@@ -96,13 +95,13 @@ def output_csv(results, outfile):
         writer = csv.DictWriter(csvfile, headers)
         writer.writeheader()
         for problem, results in results.items():
-            to_write = copy.deepcopy([results])
+            to_write = copy.deepcopy(results)
             to_write['Problem'] = problem
             writer.writerow(to_write)
 
 
 def round_to_sig_figs(value, sig_figs):
-    return round(value, -int(floor(log10(abs(value)))) + sig_figs)
+    return round(value, -int(floor(log10(value))) + sig_figs - 1)
 
 
 def output_markdown(results, outfile):

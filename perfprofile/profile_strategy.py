@@ -131,13 +131,13 @@ class ShebangStrategy(ProfileStrategy):
 
 
 class GroovyDirectStrategy(ShebangStrategy):
-    name = 'Groovy (Direct)'
+    name = 'Groovy 2.5.6/JDK8 (Direct)'
     extensions = {'.groovy', '.gvy', '.gy', '.gsh'}
     iterations = 3
 
 
 class GroovyNailgunStrategy(ProfileStrategy):
-    name = 'Groovy (NailGun)'
+    name = 'Groovy 2.5.6/JDK8 (NailGun)'
     extensions = {'.groovy', '.gvy', '.gy', '.gsh'}
     docker_image = 'ericmiller/groovy-nailgun:2.5.6-jdk8'
     docker_entrypoint = None
@@ -157,30 +157,42 @@ class GroovyNailgunStrategy(ProfileStrategy):
 
 
 class LazyJavaScriptStrategy(ShebangStrategy):
-    name = 'JavaScript'
+    name = 'Node.js 8.5.1'
     extensions = {'.js'}
     docker_image = 'node:8.15.1-alpine'
 
 
 class LazyPythonStrategy(ShebangStrategy):
-    name = 'Python'
+    name = 'Python 3.7.3'
     extensions = {'.py'}
-    docker_iamge = 'python:3.7.3-alpine'
+    docker_image = 'python:3.7.3-alpine'
+
+
+class PyPyStrategy(ShebangStrategy):
+    name = 'PyPy 3.6-7.1.0'
+    extensions = {'.py'}
+    docker_image = 'pypy:3.6-7.1.0-slim'
+
+    def command_for(self, f):
+        return ['pypy3', f]
 
 
 class LazyRubyStrategy(ShebangStrategy):
-    name = 'Ruby'
+    name = 'Ruby 2.6.0'
     extensions = {'.rb'}
     docker_image = 'ruby:2.6.0-alpine'
 
 
 class GoStrategy(ProfileStrategy):
+    name = 'Go 1.12.3'
     golibs = ['Go/sieve.go']
     docker_image = 'golang:1.12-alpine'
 
 
 class GoRunStrategy(GoStrategy):
-    name = 'Go (Go Run)'
+    @property
+    def name(self):
+        return '{} (Run)'.format(super().name)
     extensions = {'.go'}
     iterations = 3
 
@@ -189,7 +201,9 @@ class GoRunStrategy(GoStrategy):
 
 
 class CompiledGoStrategy(GoStrategy):
-    name = 'Go (Compiled)'
+    @property
+    def name(self):
+        return '{} (Compiled)'.format(super().name)
     extensions = {'.go'}
     # Since go is compiled, it is much much faster, so we use more iterations.
     iterations = 20
