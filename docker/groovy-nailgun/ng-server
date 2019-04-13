@@ -1,2 +1,2 @@
 #!/bin/sh
-java -cp "$GROOVY_HOME/*:$NAILGUN_HOME/*:$NAILGUN_CP" -server com.facebook.nailgun.NGServer $*
+java -cp "$GROOVY_HOME/lib/*:$NAILGUN_HOME/*:$NAILGUN_CP" -server com.facebook.nailgun.NGServer $*

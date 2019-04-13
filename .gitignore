@@ -15,5 +15,6 @@ hs_err_pid*
 **/node_modules/
 *.o
 *.class
+*.bin
 
 Powershell/*.*/**

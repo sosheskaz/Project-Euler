@@ -1,6 +1,11 @@
-#!/usr/bin/env bash
+#!/usr/bin/env bash -xe
 # This may take a long time to run.
 mkdir -p profiles
+
+cd "$(dirname $0)"
+docker run --rm -it -v "$PWD:/workspace" -w /workspace golang:latest \
+    go build -o perfprofile/profile.bin perfprofile/profile.go
+
 python3 perfprofile/perfprofile.py \
     Go/Baseline.go Go/Euler*.go \
     Groovy/Baseline.groovy Groovy/Euler*.groovy \

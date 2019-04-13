@@ -62,7 +62,7 @@ def main():
 
     for breakdown in all_results.values():
         for strat_name, result in breakdown.items():
-            breakdown[strat_name] = round_to_sig_figs(result, 5)
+            breakdown[strat_name] = '{:.4}'.format(result)
 
     for outfile in args.outfile:
         print('Writing {}'.format(outfile))
@@ -98,10 +98,6 @@ def output_csv(results, outfile):
             to_write = copy.deepcopy(results)
             to_write['Problem'] = problem
             writer.writerow(to_write)
-
-
-def round_to_sig_figs(value, sig_figs):
-    return round(value, -int(floor(log10(value))) + sig_figs - 1)
 
 
 def output_markdown(results, outfile):

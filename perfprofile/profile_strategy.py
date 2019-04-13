@@ -1,7 +1,8 @@
+import json
 import os
 from time import time, sleep
 import stat
-from subprocess import check_call, call, Popen, DEVNULL
+from subprocess import check_call, check_output, call, Popen, DEVNULL
 import docker
 
 
@@ -13,7 +14,7 @@ class ProfileStrategy(object):
     docker_image = None
 
     docker_volumes = {
-        os.path.realpath(os.curdir): {
+        os.path.realpath(os.path.join(os.path.dirname(__file__), '..')): {
             'bind': '/workspace',
             'mode': 'rw'
         }
@@ -32,8 +33,8 @@ class ProfileStrategy(object):
         }
 
     docker_exec_args = {
-        'stdout': False,
-        'stderr': False
+        'stdout': True,
+        'stderr': True
     }
 
     _docker_client = None
@@ -77,25 +78,22 @@ class ProfileStrategy(object):
         if self._docker_container:
             return self._docker_container.exec_run(command, **self.docker_exec_args)
         else:
-            check_call(command, stdout=DEVNULL, stderr=DEVNULL)
+            p = Popen(command, stdout=DEVNULL, stderr=DEVNULL)
+            stdout, _ = p.communicate()
+            rc = p.returncode
+            return (rc, stdout)
 
     def time_file(self, f):
         '''Runs the file.'''
-        command = self.command_for(f)
-        if self._docker_container:
-            start = time()
-            self.exec(command)
-            end = time()
-        else:
-            start = time()
-            check_call(command, stdout=DEVNULL, stderr=DEVNULL)
-            end = time()
-        return end - start
+        command = ['perfprofile/profile.bin', *self.command_for(f)]
+        _, output = self.exec(command)
+        result = json.loads(output)
+        return float(result['Average'])
 
     def get_perf_profile(self, f):
         '''invokes run_file inside time to get perf data.'''
         self.setup_for(f)
-        _time = sum(self.time_file(f) for _ in range(0, self.iterations)) / self.iterations
+        _time = self.time_file(f)
         self.cleanup_for(f)
         return _time
 
@@ -204,7 +202,7 @@ class JrubyStrategy(ShebangStrategy):
 class GoStrategy(ProfileStrategy):
     name = 'Go 1.12.3'
     golibs = ['Go/sieve.go']
-    docker_image = 'golang:1.12-alpine'
+    docker_image = 'golang:1.12'
 
 
 class GoRunStrategy(GoStrategy):
@@ -222,6 +220,19 @@ class CompiledGoStrategy(GoStrategy):
     @property
     def name(self):
         return '{} (Compiled)'.format(super().name)
+
+    @property
+    def docker_volumes(self):
+        volumes = super().docker_volumes
+        additional = {
+            '/tmp/project-euler/.cache': {
+                'bind': '/.cache',
+                'mode': 'rw'
+            }
+        }
+        volumes.update(additional)
+        return volumes
+
     extensions = {'.go'}
     # Since go is compiled, it is much much faster, so we use more iterations.
     iterations = 20
@@ -230,7 +241,7 @@ class CompiledGoStrategy(GoStrategy):
         return '{}.bin'.format(f)
 
     def command_for(self, f):
-        return [os.path.realpath(self._target_for(f))]
+        return [self._target_for(f)]
 
     def setup_for(self, f):
         target = self._target_for(f)
