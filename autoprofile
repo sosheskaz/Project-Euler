@@ -1,9 +1,10 @@
-#!/usr/bin/env bash -xe
+#!/bin/sh -xe
 # This may take a long time to run.
 mkdir -p profiles
 
 cd "$(dirname $0)"
-docker run --rm -it -v "$PWD:/workspace" -w /workspace golang:latest \
+mkdir -p /tmp/project-euler/.cache
+docker run --rm -it -v "$PWD:/workspace" -v "/tmp/project-euler/.cache:/.cache" -u $(id -u) -w /workspace golang:latest \
     go build -o perfprofile/profile.bin perfprofile/profile.go
 
 python3 perfprofile/perfprofile.py \
