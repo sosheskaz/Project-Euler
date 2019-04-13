@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 const generators = require("./generators.js")
 
-
 function main() {
   const max = 20
 
