@@ -6,7 +6,7 @@ def sieve(Integer limit) {
 
   Integer x2, y2, n, nMod12
 
-  Integer sqrtLimit = (int)Math.sqrt(limit)
+  Integer sqrtLimit = (int)Math.ceil(Math.sqrt(limit))
   for (Integer x = 1; x <= sqrtLimit; x += 1) {
     x2 = x * x
     for (Integer y = 1; y <= sqrtLimit; y += 1) {
