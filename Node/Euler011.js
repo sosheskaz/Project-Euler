@@ -9,7 +9,7 @@ function main() {
 }
 
 function loadFile(path) {
-  var contents = fs.readFileSync('input/Euler011.txt', 'utf8');
+  var contents = fs.readFileSync(path, 'utf8');
   table = contents.split("\n").filter((line) => line).map((line) => {
     return line.split(" ").filter((item) => item).map((item) => parseInt(item));
   });
