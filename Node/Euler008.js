@@ -15,7 +15,6 @@ function main() {
   buffer.fill(0);
 
   var product = 0;
-  var nextProduct = 0;
   contents.forEach((c, index) => {
     buffer[index % factorCt] = c;
     product = Math.max(product, buffer.reduce((collector, value) => collector * value));
@@ -23,4 +22,6 @@ function main() {
   console.log(product);
 }
 
-main()
+if (require.main === module) {
+  main();
+}

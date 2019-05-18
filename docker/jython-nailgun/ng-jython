@@ -1,2 +1,0 @@
-#!/bin/sh
-ng org.python.util.jython $*

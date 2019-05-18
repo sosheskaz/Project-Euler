@@ -7,7 +7,6 @@ import java.nio.file.Paths
 URI sourceUri
 
 Path scriptLocation = Paths.get(sourceUri)
-
 sieve = evaluate(new File("${scriptLocation.parent}/lib/sieve.groovy"))
 
 void main() {

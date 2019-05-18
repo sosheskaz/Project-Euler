@@ -7,4 +7,6 @@ def main
   puts square_of_sums - sum_of_squares
 end
 
-main
+if __FILE__ == $0
+  main
+end

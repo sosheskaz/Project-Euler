@@ -10,9 +10,11 @@ function main() {
     squareOfSum += i;
     sumOfSquares += i * i;
   }
-  squareOfSum *= squareOfSum
+  squareOfSum *= squareOfSum;
 
-  console.log(squareOfSum - sumOfSquares)
+  console.log(squareOfSum - sumOfSquares);
 }
 
-main()
+if (require.main === module) {
+  main();
+}

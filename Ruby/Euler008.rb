@@ -19,4 +19,6 @@ def main
   puts product
 end
 
-main
+if __FILE__ == $0
+  main
+end

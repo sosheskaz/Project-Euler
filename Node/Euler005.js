@@ -27,7 +27,7 @@ function* map(fn, xs) {
 }
 
 function* primes() {
-  primeList = []
+  primeList = [];
 
   yield 2;
 
@@ -39,4 +39,6 @@ function* primes() {
   }
 }
 
-main()
+if (require.main === module) {
+  main();
+}

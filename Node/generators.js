@@ -4,6 +4,16 @@ function* map(iter, fn) {
     yield fn(x)
   }
 }
+
+function* filter(iter, fn) {
+  for (let x of iter) {
+    if (fn(x)) {
+      yield x
+    }
+  }
+}
+exports.filter = filter
+
 exports.map = map
 
 function reduce (iter, start, fn) {

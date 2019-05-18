@@ -1,11 +1,12 @@
 #!/usr/bin/env groovy
 
-void main() {
-  int sum = (3..999).by(3).sum()
+class Euler001 {
+  public static void main(String[] args) {
 
-  sum += (5..999).by(5).findAll { it % 3 != 0 }.sum()
+    int sum = (3..999).by(3).sum()
 
-  println sum
+    sum += (5..999).by(5).findAll { it % 3 != 0 }.sum()
+
+    println sum
+  }
 }
-
-main()

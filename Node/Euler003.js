@@ -6,23 +6,25 @@ function main() {
 }
 
 function* primeFactors(num) {
-  var factors = []
+  var factors = [];
 
   while (num % 2 == 0) {
-    num /= 2
-    yield 2
+    num /= 2;
+    yield 2;
   }
 
   for (let i = 3; i <= num; i += 2) {
     if (num == 1) {
-      break
+      break;
     }
 
     while (num % i == 0) {
       num /= i
-      yield i
+      yield i;
     }
   }
 }
 
-main()
+if (require.main === module) {
+  main();
+}

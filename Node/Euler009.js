@@ -20,11 +20,13 @@ function main() {
           return;
         }
         else {
-          break
+          break;
         }
       }
     }
   }
 }
 
-main()
+if (require.main === module) {
+  main();
+}
