@@ -15,6 +15,7 @@ function loadFile(path) {
   });
   return table;
 }
+exports.loadFile = loadFile
 
 function maxProduct(table, length) {
   biggest = 1;
