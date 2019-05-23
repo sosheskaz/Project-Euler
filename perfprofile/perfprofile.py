@@ -28,6 +28,8 @@ def main():
 
     print('Bootstrapping docker containers...')
     with profile_strategy.LazyJavaScriptStrategy() as js, \
+        profile_strategy.Node11Strategy() as js11, \
+        profile_strategy.Node10Strategy() as js10, \
         profile_strategy.LazyPythonStrategy() as py, \
         profile_strategy.PyPyStrategy() as pypy, \
         profile_strategy.LazyRubyStrategy() as rb, \
@@ -35,7 +37,7 @@ def main():
         profile_strategy.GroovyDirectStrategy() as grv, \
         profile_strategy.CompiledGoStrategy() as goc:
 
-        strategies = [js, py, pypy, rb, grvng, grv, goc]
+        strategies = [js, js11, js10, py, pypy, rb, grvng, grv, goc]
 
         for problem, files in problems:
             print('Profiling {}'.format(problem))

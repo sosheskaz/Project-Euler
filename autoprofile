@@ -11,7 +11,7 @@ python3 perfprofile/perfprofile.py \
     Go/Baseline.go Go/Euler*.go \
     Groovy/Baseline.groovy Groovy/Euler*.groovy \
     Node/Baseline.js Node/Euler*.js \
-    Python/Baseline.py Python/Euler00*.py \
+    Python/Baseline.py Python/Euler00*.py Python/Euler01*.py Python/Euler020.py Python/Euler067.py \
     Ruby/Baseline.rb Ruby/Euler*.rb \
     -o profiles/perfprofile.json profiles/perfprofile.yml profiles/perfprofile.csv profiles/perfprofile.md
 

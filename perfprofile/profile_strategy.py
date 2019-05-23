@@ -55,7 +55,10 @@ class ProfileStrategy(object):
 
     def open(self):
         if self.docker_image:
-            self._docker_client.images.pull(self.docker_image)
+            try:
+                self._docker_client.images.get(self.docker_image)
+            except docker.errors.ImageNotFound:
+                self._docker_client.images.pull(self.docker_image)
             self._docker_container = self._docker_client.containers.run(self.docker_image, **self.docker_run_args)
 
     def command_for(self, f):
@@ -159,6 +162,16 @@ class LazyJavaScriptStrategy(ShebangStrategy):
     name = 'Node.js 12.3.0'
     extensions = {'.js'}
     docker_image = 'node:12.3.0-alpine'
+
+
+class Node11Strategy(LazyJavaScriptStrategy):
+    name = 'Node.js 11.15.0'
+    docker_image = 'node:11.15.0-alpine'
+
+
+class Node10Strategy(LazyJavaScriptStrategy):
+    name = 'Node.js 10.15.3'
+    docker_image = 'node:10.15.3-alpine'
 
 
 class LazyPythonStrategy(ShebangStrategy):
