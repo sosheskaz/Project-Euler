@@ -1,11 +1,11 @@
 cpu:
-                       Intel(R) Core(TM) i7-4710MQ CPU @ 2.50GHz, 3415 MHz
-                       Intel(R) Core(TM) i7-4710MQ CPU @ 2.50GHz, 3345 MHz
-                       Intel(R) Core(TM) i7-4710MQ CPU @ 2.50GHz, 3087 MHz
-                       Intel(R) Core(TM) i7-4710MQ CPU @ 2.50GHz, 3475 MHz
-                       Intel(R) Core(TM) i7-4710MQ CPU @ 2.50GHz, 3300 MHz
-                       Intel(R) Core(TM) i7-4710MQ CPU @ 2.50GHz, 2616 MHz
-                       Intel(R) Core(TM) i7-4710MQ CPU @ 2.50GHz, 3380 MHz
+                       Intel(R) Core(TM) i7-4710MQ CPU @ 2.50GHz, 2916 MHz
+                       Intel(R) Core(TM) i7-4710MQ CPU @ 2.50GHz, 3266 MHz
+                       Intel(R) Core(TM) i7-4710MQ CPU @ 2.50GHz, 3329 MHz
+                       Intel(R) Core(TM) i7-4710MQ CPU @ 2.50GHz, 3375 MHz
+                       Intel(R) Core(TM) i7-4710MQ CPU @ 2.50GHz, 3314 MHz
+                       Intel(R) Core(TM) i7-4710MQ CPU @ 2.50GHz, 3117 MHz
+                       Intel(R) Core(TM) i7-4710MQ CPU @ 2.50GHz, 3317 MHz
                        Intel(R) Core(TM) i7-4710MQ CPU @ 2.50GHz, 3325 MHz
 graphics card:
                        Intel 4th Gen Core Processor Integrated Graphics Controller
