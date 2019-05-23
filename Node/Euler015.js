@@ -19,6 +19,7 @@ function factorial(n) {
   }
   return p
 }
+exports.factorial = factorial
 
 if (require.main == module) {
   main();
