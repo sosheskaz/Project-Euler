@@ -7,7 +7,6 @@ class Euler014 {
 
     def chains = (0L..target).stream()
         .map { i -> [num: i, collatz: collatz(i)] }
-        // .max { it.collatz.size() }
 
     int biggestChain = -1
     int biggestStarting = -1

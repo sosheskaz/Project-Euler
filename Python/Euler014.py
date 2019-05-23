@@ -1,13 +1,9 @@
 #!/usr/bin/env python3
 import os
-import joblib
 
 
 def main():
     target = 1000000
-
-    # pickled_collatz = joblib.delayed(lambda n: (n, len(collatz(n))))
-    # parallel = joblib.Parallel(os.cpu_count())
 
     chains = (collatz(i) for i in range(1, target))
 
