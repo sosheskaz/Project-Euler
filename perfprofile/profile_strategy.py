@@ -155,9 +155,9 @@ class GroovyNailgunStrategy(ProfileStrategy):
 
 
 class LazyJavaScriptStrategy(ShebangStrategy):
-    name = 'Node.js 8.5.1'
+    name = 'Node.js 12.3.0'
     extensions = {'.js'}
-    docker_image = 'node:8.15.1-alpine'
+    docker_image = 'node:12.3.0-alpine'
 
 
 class LazyPythonStrategy(ShebangStrategy):
