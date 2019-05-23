@@ -55,6 +55,7 @@ class ProfileStrategy(object):
 
     def open(self):
         if self.docker_image:
+            self._docker_client.images.pull(self.docker_image)
             self._docker_container = self._docker_client.containers.run(self.docker_image, **self.docker_run_args)
 
     def command_for(self, f):
