@@ -32,9 +32,10 @@ def main():
         profile_strategy.PyPyStrategy() as pypy, \
         profile_strategy.LazyRubyStrategy() as rb, \
         profile_strategy.GroovyNailgunStrategy() as grvng, \
+        profile_strategy.GroovyDirectStrategy() as grv, \
         profile_strategy.CompiledGoStrategy() as goc:
 
-        strategies = [js, py, pypy, rb, grvng, goc]
+        strategies = [js, py, pypy, rb, grvng, grv, goc]
 
         for problem, files in problems:
             print('Profiling {}'.format(problem))
@@ -62,7 +63,7 @@ def main():
 
     for breakdown in all_results.values():
         for strat_name, result in breakdown.items():
-            breakdown[strat_name] = '{:.4}'.format(result)
+            breakdown[strat_name] = result
 
     for outfile in args.outfile:
         print('Writing {}'.format(outfile))
@@ -91,13 +92,21 @@ def output_csv(results, outfile):
     headers = ['Problem']
     headers += list(sorted(set(chain.from_iterable(problem.keys()
                                                    for problem in results.values()))))
+
     with open(outfile, 'w') as csvfile:
-        writer = csv.DictWriter(csvfile, headers)
-        writer.writeheader()
-        for problem, results in results.items():
-            to_write = copy.deepcopy(results)
-            to_write['Problem'] = problem
-            writer.writerow(to_write)
+        for title, selector in [
+                    ('Clock Time (s)', 'Average'),
+                    ('Memory (B)', 'AverageMem'),
+                    ('User Time (s)', 'AverageUTime'),
+                    ('System Time (s)', 'AverageSTime')
+                ]:
+            csvfile.write('\n{}\n'.format(title))
+            writer = csv.DictWriter(csvfile, headers)
+            writer.writeheader()
+            for problem, resultset in results.items():
+                to_write = {problem: result[selector] for problem, result in resultset.items()}
+                to_write['Problem'] = problem
+                writer.writerow(to_write)
 
 
 def output_markdown(results, outfile):
@@ -106,14 +115,26 @@ def output_markdown(results, outfile):
                                                    for problem in results.values()))))
     with open(outfile, 'w') as csvfile:
         writer = csv.DictWriter(csvfile, headers, delimiter='|')
-        writer.writeheader()
-        writer.writerow({header: '---' for header in headers})
-        for problem, results in results.items():
-            to_write = copy.deepcopy(results)
-            to_write['Problem'] = problem
-            writer.writerow(to_write)
+        for title, selector in [
+            ('Clock Time (s)', 'Average'),
+            ('Memory (B)', 'AverageMem'),
+            ('User Time (s)', 'AverageUTime'),
+            ('System Time (s)', 'AverageSTime')
+        ]:
+            csvfile.write('\n\n# {}\n\n'.format(title))
+            writer.writeheader()
+            writer.writerow({header: '---' for header in headers})
+            for problem, resultset in results.items():
+                formatter = '{}'
+                cast = int
+                if any(isinstance(result[selector], float) for result in resultset.values()):
+                    formatter = '{:.05}'
+                    cast = float
 
-
+                to_write = {problem: formatter.format(cast(result[selector]))
+                            for problem, result in resultset.items()}
+                to_write['Problem'] = problem
+                writer.writerow(to_write)
 
 
 if __name__ == '__main__':

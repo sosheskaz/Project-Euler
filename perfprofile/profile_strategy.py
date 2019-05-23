@@ -88,14 +88,14 @@ class ProfileStrategy(object):
         command = ['perfprofile/profile.bin', *self.command_for(f)]
         _, output = self.exec(command)
         result = json.loads(output)
-        return float(result['Average'])
+        return result
 
     def get_perf_profile(self, f):
         '''invokes run_file inside time to get perf data.'''
         self.setup_for(f)
-        _time = self.time_file(f)
+        result = self.time_file(f)
         self.cleanup_for(f)
-        return _time
+        return result
 
 
 class ShebangError(Exception):
@@ -129,7 +129,7 @@ class ShebangStrategy(ProfileStrategy):
 
 
 class GroovyDirectStrategy(ShebangStrategy):
-    name = 'Groovy 2.5.6/JDK8 (Direct)'
+    name = 'Groovy 2.5.6/JDK8 (Standard)'
     extensions = {'.groovy', '.gvy', '.gy', '.gsh'}
     iterations = 3
 
