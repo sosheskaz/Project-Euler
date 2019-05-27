@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 from itertools import chain
 import math
-import multiprocessing
 import os
 
 

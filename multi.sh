@@ -14,26 +14,27 @@ fname="Euler$number"
 gofile="Go/$fname.go"
 golibs="Go/sieve.go"
 
-groovyserver 2>&1 > /dev/null
 groovyfile="Groovy/$fname.groovy"
 
 nodefile="Node/$fname.js"
 pythonfile="Python/$fname.py"
 rubyfile="Ruby/$fname.rb"
-swiftfile="Swift/$fname.swift"
+
+csdir="CSharp/$fname"
 
 chmod +x "$groovyfile" "$pythonfile" "$rubyfile" "$nodefile"> /dev/null 2>/dev/null
-
 
 if [ -f "$gofile" ]; then goval=$(go run "$gofile" $golibs 2>/dev/null); fi
 if [ -f "$groovyfile" ]; then groovyval=$($groovyfile 2>/dev/null); fi
 if [ -f "$nodefile" ]; then nodeval=$($nodefile 2>/dev/null); fi
 if [ -f "$pythonfile" ]; then pythonval=$($pythonfile 2>/dev/null); fi
 if [ -f "$rubyfile" ]; then rubyval=$($rubyfile 2>/dev/null); fi
+if [ -d "$csdir" ]; then csval=$(dotnet run --project "$csdir"); fi
 
 echo "
 Go:         $goval
 Groovy:     $groovyval
 Node.js:    $nodeval
 Python:     $pythonval
-Ruby:       $rubyval"
+Ruby:       $rubyval
+CSharp:     $csval"
