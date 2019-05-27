@@ -27,17 +27,22 @@ def main():
     all_results = {}
 
     print('Bootstrapping docker containers...')
-    with profile_strategy.LazyJavaScriptStrategy() as js, \
-        profile_strategy.Node11Strategy() as js11, \
-        profile_strategy.Node10Strategy() as js10, \
-        profile_strategy.LazyPythonStrategy() as py, \
-        profile_strategy.PyPyStrategy() as pypy, \
-        profile_strategy.LazyRubyStrategy() as rb, \
-        profile_strategy.GroovyNailgunStrategy() as grvng, \
-        profile_strategy.GroovyDirectStrategy() as grv, \
-        profile_strategy.CompiledGoStrategy() as goc:
+    with print('\tNode 12...') or profile_strategy.Node12Strategy() as js12, \
+        print('\tNode 11...') or profile_strategy.Node11Strategy() as js11, \
+        print('\tNode 10...') or profile_strategy.Node10Strategy() as js10, \
+        print('\tCPython...') or profile_strategy.CPythonStrategy() as py, \
+        print('\tPyPy...') or profile_strategy.PyPyStrategy() as pypy, \
+        print('\tRuby...') or profile_strategy.RubyStrategy() as rb, \
+        print('\tGroovy NG...') or profile_strategy.GroovyNailgunStrategy() as grvng, \
+        print('\tGroovy...') or profile_strategy.GroovyDirectStrategy() as grv, \
+        print('\tGolang...') or profile_strategy.GoStrategy() as go, \
+        print('\tGolang noGC...') or profile_strategy.GoNoGcStrategy() as gonogc, \
+        print('\tC#.NET...') or profile_strategy.CSharpDotNetCoreStrategy() as cscore:
 
-        strategies = [js, js11, js10, py, pypy, rb, grvng, grv, goc]
+        strategies = [js12, js11, js10, py, pypy, rb, grvng, grv, go, gonogc, cscore]
+
+        print('Bootstrapping profiler...')
+        go.exec(['go', 'build', '-o', 'perfprofile/profile.bin', 'perfprofile/profile.go'])
 
         for problem, files in problems:
             print('Profiling {}'.format(problem))

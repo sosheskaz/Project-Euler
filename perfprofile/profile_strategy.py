@@ -3,6 +3,8 @@ import os
 from time import time, sleep
 import stat
 from subprocess import check_call, check_output, call, Popen, DEVNULL
+import shutil
+import traceback
 import docker
 
 
@@ -91,7 +93,14 @@ class ProfileStrategy(object):
         '''Runs the file.'''
         command = ['perfprofile/profile.bin', *self.command_for(f)]
         _, output = self.exec(command)
-        result = json.loads(output)
+        try:
+            result = json.loads(output)
+        except json.JSONDecodeError as jde:
+            print('Command failed: {}'.format(command))
+            print('Failed to decode output JSON:')
+            print(output)
+            traceback.print_exc()
+            raise jde
         return result
 
     def get_perf_profile(self, f):
@@ -158,24 +167,24 @@ class GroovyNailgunStrategy(ProfileStrategy):
             retries -= 1
 
 
-class LazyJavaScriptStrategy(ShebangStrategy):
+class Node12Strategy(ShebangStrategy):
     name = 'Node.js 12.3.0'
     extensions = {'.js'}
     docker_image = 'node:12.3.0-alpine'
 
 
-class Node11Strategy(LazyJavaScriptStrategy):
+class Node11Strategy(Node12Strategy):
     name = 'Node.js 11.15.0'
     docker_image = 'node:11.15.0-alpine'
 
 
-class Node10Strategy(LazyJavaScriptStrategy):
+class Node10Strategy(Node12Strategy):
     name = 'Node.js 10.15.3'
     docker_image = 'node:10.15.3-alpine'
 
 
-class LazyPythonStrategy(ShebangStrategy):
-    name = 'Python 3.7.3'
+class CPythonStrategy(ShebangStrategy):
+    name = 'CPython 3.7.3'
     extensions = {'.py'}
     docker_image = 'python:3.7.3-alpine'
 
@@ -189,51 +198,16 @@ class PyPyStrategy(ShebangStrategy):
         return ['pypy3', f]
 
 
-class JythonStrategy(ShebangStrategy):
-    name = 'Jython 2.7 (Nailgun)'
-    extensions = {'.py'}
-    docker_image = 'ericmiller/jython-nailgun:2.7'
-
-    def command_for(self, f):
-        return ['ng-jython', f]
-
-
-class LazyRubyStrategy(ShebangStrategy):
+class RubyStrategy(ShebangStrategy):
     name = 'Ruby 2.6.0'
     extensions = {'.rb'}
     docker_image = 'ruby:2.6.0-alpine'
 
 
-class JrubyStrategy(ShebangStrategy):
-    name = 'JRuby 9.2 (Nailgun)'
-    extensions = {'.rb'}
-    docker_image = 'ericmiller/jruby-nailgun:9.2'
-
-    def command_for(self, f):
-        return ['ng-jruby', f]
-
-
 class GoStrategy(ProfileStrategy):
-    name = 'Go 1.12.3'
+    name = 'Go 1.12'
     golibs = ['Go/sieve.go']
     docker_image = 'golang:1.12'
-
-
-class GoRunStrategy(GoStrategy):
-    @property
-    def name(self):
-        return '{} (Run)'.format(super().name)
-    extensions = {'.go'}
-    iterations = 3
-
-    def command_for(self, f):
-        return ['go', 'run', f, *self.golibs]
-
-
-class CompiledGoStrategy(GoStrategy):
-    @property
-    def name(self):
-        return '{} (Compiled)'.format(super().name)
 
     @property
     def docker_volumes(self):
@@ -266,14 +240,78 @@ class CompiledGoStrategy(GoStrategy):
         if os.path.isfile(target):
             os.remove(target)
 
+
+class GoNoGcStrategy(GoStrategy):
+    env = {
+        'GOGC': 'off'
+    }
+
+    @property
+    def name(self):
+        return '{} (No GC)'.format(super().name)
+
+    def setup_for(self, f):
+        target = self._target_for(f)
+        self.exec(['go', 'build', '-o', target, f, *self.golibs])
+
+
+class CSharpStrategy(ProfileStrategy):
+    name = 'C#'
+    extensions = {'.csproj'}
+
+    @property
+    def docker_volumes(self):
+        volumes = super().docker_volumes
+        additional = {
+            '/tmp/project-euler/.dotnet': {
+                'bind': '/.dotnet',
+                'mode': 'rw'
+            },
+            '/tmp/project-euler/.nuget': {
+                'bind': '/.nuget',
+                'mode': 'rw'
+            }
+        }
+        volumes.update(additional)
+        return volumes
+
+
+class CSharpDotNetCoreStrategy(CSharpStrategy):
+    _version = '2.2'
+
+    @property
+    def name(self):
+        return 'C# .NET Core {}'.format(self._version)
+
+    @property
+    def docker_image(self):
+        return 'mcr.microsoft.com/dotnet/core/sdk:{}'.format(self._version)
+
+    def setup_for(self, f):
+        print(['dotnet', 'build', '-o', 'bin', f])
+        self.exec(['dotnet', 'build', '-o', 'bin', f])
+
+    def command_for(self, f):
+        dll_file = '{}.dll'.format(os.path.splitext(os.path.basename(f))[0])
+        dll_file = os.path.join(os.path.dirname(f), 'bin', dll_file)
+
+        return ['dotnet', dll_file]
+
+    def cleanup_for(self, f):
+        shutil.rmtree(os.path.join(os.path.dirname(f), 'bin'))
+
+
 STRATEGIES = [
-    LazyJavaScriptStrategy,
-    LazyPythonStrategy,
-    LazyRubyStrategy,
+    Node12Strategy,
+    Node11Strategy,
+    Node10Strategy,
+    CPythonStrategy,
+    RubyStrategy,
     GroovyDirectStrategy,
     GroovyNailgunStrategy,
-    GoRunStrategy,
-    CompiledGoStrategy
+    GoStrategy,
+    GoNoGcStrategy,
+    CSharpDotNetCoreStrategy
 ]
 
 def strategies_for(f):
