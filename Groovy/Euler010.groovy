@@ -11,7 +11,7 @@ sieve = evaluate(new File("${scriptLocation.parent}/lib/sieve.groovy"))
 
 void main() {
   final int target = 2000000
-  List<Integer> primes = sieve.sieve(2000000)
+  List<Integer> primes = sieve.sieve(target)
 
   // We can't use vanilla sum() becuase of integer overflow.
   Long sum = primes.inject({ a, b -> (Long)a + b })

@@ -30,16 +30,16 @@ def main():
     with print('\tNode 12...') or profile_strategy.Node12Strategy() as js12, \
         print('\tNode 11...') or profile_strategy.Node11Strategy() as js11, \
         print('\tNode 10...') or profile_strategy.Node10Strategy() as js10, \
-        print('\tCPython...') or profile_strategy.CPythonStrategy() as py, \
-        print('\tPyPy...') or profile_strategy.PyPyStrategy() as pypy, \
+        print('\tCPython 3...') or profile_strategy.CPython3Strategy() as py3, \
+        print('\tCPython 2...') or profile_strategy.CPython2Strategy() as py2, \
+        print('\tPyPy 3...') or profile_strategy.PyPy3Strategy() as pypy3, \
+        print('\tPyPy 2...') or profile_strategy.PyPy2Strategy() as pypy2, \
         print('\tRuby...') or profile_strategy.RubyStrategy() as rb, \
-        print('\tGroovy NG...') or profile_strategy.GroovyNailgunStrategy() as grvng, \
-        print('\tGroovy...') or profile_strategy.GroovyDirectStrategy() as grv, \
         print('\tGolang...') or profile_strategy.GoStrategy() as go, \
-        print('\tGolang noGC...') or profile_strategy.GoNoGcStrategy() as gonogc, \
-        print('\tC#.NET...') or profile_strategy.CSharpDotNetCoreStrategy() as cscore:
+        print('\tC#.NET...') or profile_strategy.CSharpDotNetCoreStrategy() as cscore, \
+        print('\tKotlin...') or profile_strategy.KotlinStrategy() as kt:
 
-        strategies = [js12, js11, js10, py, pypy, rb, grvng, grv, go, gonogc, cscore]
+        strategies = [js12, js11, js10, py3, py2, pypy3, pypy2, rb, go, cscore, kt]
 
         print('Bootstrapping profiler...')
         go.exec(['go', 'build', '-o', 'perfprofile/profile.bin', 'perfprofile/profile.go'])

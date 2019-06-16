@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+from __future__ import print_function
 from datetime import datetime
+import sys
+if sys.version.startswith('2'):
+    range = xrange
 
 
 def main():

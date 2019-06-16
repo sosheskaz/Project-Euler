@@ -8,34 +8,47 @@ import (
 func main() {
 	const target = 10000
 
-	properDivisorsSum := make(map[int]int)
-	for i := 2; i < target; i++ {
-		properDivisorsSum[i] = Sum(ProperDivisors(i)...)
+	properDivisorsSums := make(map[int]int)
+	var amicableSum int
+
+	for i := 1; i < target; i++ {
+		// Grab the proper divisor of i
+		divisorsSum, found := properDivisorsSums[i]
+		if !found {
+			// Cache the result for good measure
+			divisorsSum = ProperDivisorsSum(i)
+			properDivisorsSums[i] = divisorsSum
+		}
+
+		// Grab the proper divisors of that number
+		otherDivisorsSum, found := properDivisorsSums[divisorsSum]
+		if !found {
+			otherDivisorsSum = ProperDivisorsSum(divisorsSum)
+			properDivisorsSums[divisorsSum] = otherDivisorsSum
+		}
+
+		// Check if they're amicable (and two different numbers)
+		if otherDivisorsSum == i && i != divisorsSum {
+			amicableSum += i
+		}
 	}
 
-	fmt.Println(properDivisorsSum)
+	fmt.Println(amicableSum)
 }
 
-func ProperDivisors(n int) []int {
-	divisors := []int{1}
+func ProperDivisorsSum(n int) int {
+	sum := 1
+	lim := int(math.Ceil(math.Sqrt(float64(n))))
 
-	for i := 2; i < int(math.Ceil(math.Sqrt(float64(n)))); i++ {
+	for i := 2; i <= lim; i++ {
 		if n%i == 0 {
-			divisors = append(divisors, i)
+			sum += i
 			otherDivisor := n / i
 			if otherDivisor != i {
-				divisors = append(divisors, otherDivisor)
+				sum += otherDivisor
 			}
 		}
 	}
 
-	return divisors
-}
-
-func Sum(n ...int) int {
-	sum := 0
-	for _, i := range n {
-		sum += i
-	}
 	return sum
 }

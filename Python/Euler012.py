@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
+from __future__ import print_function
 from itertools import chain
 import math
 import os
+import sys
+if sys.version.startswith('2'):
+    range = xrange
 
 
 def main():
@@ -13,7 +17,7 @@ def main():
     print(next(gt_target)[0])
 
 
-def get_factors(of_int: int):
+def get_factors(of_int):
     max_low_factor = int(math.sqrt(of_int)) + 1
     low_factors = {i for i in range(1, max_low_factor) if of_int % i == 0}
     high_factors = {of_int//i for i in low_factors}

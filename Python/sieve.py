@@ -1,5 +1,8 @@
 import itertools
 import math
+import sys
+if sys.version.startswith('2'):
+    range = xrange
 
 def sieve(lim):
     sieve = [False] * (lim + 1)

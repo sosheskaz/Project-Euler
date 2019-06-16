@@ -183,19 +183,35 @@ class Node10Strategy(Node12Strategy):
     docker_image = 'node:10.15.3-alpine'
 
 
-class CPythonStrategy(ShebangStrategy):
+class CPython3Strategy(ShebangStrategy):
     name = 'CPython 3.7.3'
     extensions = {'.py'}
     docker_image = 'python:3.7.3-alpine'
 
 
-class PyPyStrategy(ShebangStrategy):
-    name = 'PyPy 3.6-7.1.0'
+class CPython2Strategy(CPython3Strategy):
+    name = 'CPython 2.7.16'
+    docker_image = 'python:2.7.16-alpine'
+
+    def command_for(self, f):
+        return ['python2', f]
+
+
+class PyPy3Strategy(ShebangStrategy):
+    name = 'PyPy 3.6-7.1.1'
     extensions = {'.py'}
-    docker_image = 'pypy:3.6-7.1.0-slim'
+    docker_image = 'pypy:3.6-7.1.1-slim'
 
     def command_for(self, f):
         return ['pypy3', f]
+
+
+class PyPy2Strategy(PyPy3Strategy):
+    name = 'PyPy 2.7-7.1.1'
+    docker_image = 'pypy:2.7-7.1.1-slim'
+
+    def command_for(self, f):
+        return ['pypy', f]
 
 
 class RubyStrategy(ShebangStrategy):
@@ -241,20 +257,6 @@ class GoStrategy(ProfileStrategy):
             os.remove(target)
 
 
-class GoNoGcStrategy(GoStrategy):
-    env = {
-        'GOGC': 'off'
-    }
-
-    @property
-    def name(self):
-        return '{} (No GC)'.format(super().name)
-
-    def setup_for(self, f):
-        target = self._target_for(f)
-        self.exec(['go', 'build', '-o', target, f, *self.golibs])
-
-
 class CSharpStrategy(ProfileStrategy):
     name = 'C#'
     extensions = {'.csproj'}
@@ -288,7 +290,6 @@ class CSharpDotNetCoreStrategy(CSharpStrategy):
         return 'mcr.microsoft.com/dotnet/core/sdk:{}'.format(self._version)
 
     def setup_for(self, f):
-        print(['dotnet', 'build', '-o', 'bin', f])
         self.exec(['dotnet', 'build', '-o', 'bin', f])
 
     def command_for(self, f):
@@ -301,17 +302,41 @@ class CSharpDotNetCoreStrategy(CSharpStrategy):
         shutil.rmtree(os.path.join(os.path.dirname(f), 'bin'))
 
 
+class KotlinStrategy(ProfileStrategy):
+    name = 'Kotlin 1.3/JDK 12'
+    extensions = {'.kt'}
+    docker_image = 'zenika/kotlin:1.3-jdk12-alpine'
+    ktlibs = ['Kotlin/Sieve.kt']
+
+    def _target_for(self, f):
+        return '{}.jar'.format(f)
+
+    def command_for(self, f):
+        return ['java', '-jar', self._target_for(f)]
+
+    def setup_for(self, f):
+        super().setup_for(f)
+        self.exec(['kotlinc', f, *self.ktlibs, '-include-runtime', '-d', self._target_for(f)])
+
+    def cleanup_for(self, f):
+        super().cleanup_for(f)
+        target = self._target_for(f)
+        if os.path.isfile(target):
+            os.remove(target)
+
+
 STRATEGIES = [
     Node12Strategy,
     Node11Strategy,
     Node10Strategy,
-    CPythonStrategy,
+    CPython3Strategy,
+    CPython2Strategy,
     RubyStrategy,
     GroovyDirectStrategy,
     GroovyNailgunStrategy,
     GoStrategy,
-    GoNoGcStrategy,
-    CSharpDotNetCoreStrategy
+    CSharpDotNetCoreStrategy,
+    KotlinStrategy
 ]
 
 def strategies_for(f):

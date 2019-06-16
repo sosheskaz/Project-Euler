@@ -4,14 +4,10 @@ from functools import reduce
 from itertools import count, takewhile
 from math import log
 from operator import mul
-# from sympy import sieve
 
 
 def main():
     n = 20
-    # Sympy is concise and efficient, but the front-loading cost is much greater
-    # than the performance increase for n = 20.
-    # primes = sieve.primerange(0, n)
     primes = takewhile(lambda x: x <= n, get_primes())
     prime_pow = lambda prime, ceiling: prime ** int(log(ceiling, prime))
     result = reduce(mul, (prime_pow(prime, n) for prime in primes))

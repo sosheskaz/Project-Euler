@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import print_function
 
 
 def main():
@@ -11,7 +12,7 @@ def main():
     print(str(numsum)[:digits])
 
 
-def parse_file(path) -> list:
+def parse_file(path):
     with open(path) as f:
         return [int(num) for num in f.readlines()]
 

@@ -1,6 +1,10 @@
 #!/usr/bin/env python
+from __future__ import print_function
 from functools import reduce
 from operator import mul
+import sys
+if sys.version.startswith('2'):
+    range = xrange
 
 
 def main():

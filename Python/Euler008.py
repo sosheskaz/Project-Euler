@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import print_function
 from functools import reduce
 from math import sqrt
 from operator import mul
