@@ -43,10 +43,9 @@ then
 fi
 
 echo "
+CSharp:     $csval
 Go:         $goval
-Groovy:     $groovyval
+Kotlin:     $kotlinval
 Node.js:    $nodeval
 Python:     $pythonval
-Ruby:       $rubyval
-CSharp:     $csval
-Kotlin:     $kotlinval"
+Ruby:       $rubyval"
