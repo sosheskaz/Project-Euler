@@ -1,0 +1,6 @@
+#!/bin/sh -e
+
+cd /workspace
+
+GOLIBS=/workspace/Go/sieve.go
+go run /workspace/Go/Euler$1.go $GOLIBS

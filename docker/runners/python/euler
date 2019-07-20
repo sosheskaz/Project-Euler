@@ -1,0 +1,4 @@
+#!/bin/sh -e
+
+cd /workspace
+python /workspace/Python/Euler$1.py

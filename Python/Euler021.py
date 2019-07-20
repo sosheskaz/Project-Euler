@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import print_function, division
 from itertools import chain
 import math
 import sys
@@ -27,7 +28,7 @@ def main():
 
 
 def get_proper_divisors_sum(n):
-    limit = math.ceil(math.sqrt(n)) + 1
+    limit = int(math.ceil(math.sqrt(n)) + 1)
     nums = ((i, n // i) for i in range(2, limit + 1) if n % i == 0)
     return sum(set(chain(*nums))) + 1
 

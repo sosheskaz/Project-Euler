@@ -1,0 +1,10 @@
+#!/bin/sh -e
+
+cd /workspace
+if which pypy >> /dev/null; then
+    pypy /workspace/Python/Euler$1.py
+elif which pypy3 >> /dev/null; then
+    pypy3 /workspace/Python/Euler$1.py
+else
+    exit -1
+fi

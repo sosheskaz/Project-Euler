@@ -14,7 +14,7 @@ fun main(args: Array<String>) {
 
         var otherDivisorsSum = properDivisorsSums[divisorsSum]
         if (otherDivisorsSum == null) {
-            otherDivisorsSum = getProperDivisorsSum(divisorsSum)
+            otherDivisorsSum = getProperDivisorsSum(divisorsSum as Int)
             properDivisorsSums[divisorsSum] = otherDivisorsSum
         }
 
