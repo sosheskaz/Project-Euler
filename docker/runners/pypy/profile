@@ -1,0 +1,13 @@
+#!/bin/sh -e
+PROBLEM=$1
+COUNT=$2
+if [ -z "$COUNT" ]; then COUNT=1; fi
+
+cd /workspace
+if which pypy >> /dev/null; then
+    profilr -count $COUNT pypy /workspace/Python/Euler$PROBLEM.py
+elif which pypy3 >> /dev/null; then
+    profilr -count $COUNT pypy3 /workspace/Python/Euler$PROBLEM.py
+else
+    exit -1
+fi

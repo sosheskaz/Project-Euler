@@ -1,5 +1,10 @@
 #!/bin/sh -e
 
-cd /workspace
+if [ -d /tmp/build ]; then rm -rf /tmp/build; fi
+mkdir -p /tmp/build
+
 csdir="/workspace/CSharp/Euler$1"
-dotnet run --project "$csdir"
+extras="/workspace/CSharp/Combinatorics"
+cp -R $csdir $extras /tmp/build
+cd /tmp/build/Euler$1
+dotnet run

@@ -1,0 +1,18 @@
+#!/bin/sh -e
+PROJECT_NAME=project-euler
+
+export PE_USER_ID=$(id -u)
+export PE_GROUP_ID=$(id -g)
+
+cd "$(dirname $0)"
+
+cd profilr
+GOOS=linux make build
+cd "$(dirname $0)"
+
+docker-compose up -d
+
+PROJECT_FILTER="label=com.docker.compose.project=$PROJECT_NAME"
+RUNNING_FILTER="status=running"
+
+CONTAINERS=$(docker container ls -f "$PROJECT_FILTER" -f "$SERVICE_FILTER" -f "$RUNNING_FILTER" --format '{{.ID}}')

@@ -222,7 +222,7 @@ class RubyStrategy(ShebangStrategy):
 
 class GoStrategy(ProfileStrategy):
     name = 'Go 1.12'
-    golibs = ['Go/sieve.go']
+    golibs = ['Go/sieve.go', 'Go/combinatorics.go']
     docker_image = 'golang:1.12'
 
     @property
@@ -306,7 +306,7 @@ class KotlinStrategy(ProfileStrategy):
     name = 'Kotlin 1.3/JDK 12'
     extensions = {'.kt'}
     docker_image = 'zenika/kotlin:1.3-jdk12-alpine'
-    ktlibs = ['Kotlin/Sieve.kt']
+    ktlibs = ['Kotlin/Sieve.kt', 'Kotlin/Combinatorics.kt']
 
     def _target_for(self, f):
         return '{}.jar'.format(f)

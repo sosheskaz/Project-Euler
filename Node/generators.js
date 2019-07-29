@@ -4,6 +4,7 @@ function* map(iter, fn) {
     yield fn(x)
   }
 }
+exports.map = map
 
 function* filter(iter, fn) {
   for (let x of iter) {
@@ -14,7 +15,6 @@ function* filter(iter, fn) {
 }
 exports.filter = filter
 
-exports.map = map
 
 function reduce (iter, start, fn) {
   var result = start

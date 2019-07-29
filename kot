@@ -4,7 +4,7 @@ cd "$(dirname $0)"
 
 mkdir -p Kotlin/bin
 
-libs="Kotlin/Sieve.kt"
+libs="Kotlin/Sieve.kt Kotlin/Combinatorics.kt"
 
-kotlinc Kotlin/Euler$1.kt "$libs" -include-runtime -d Kotlin/bin/Euler$1.jar
+kotlinc Kotlin/Euler$1.kt $libs -include-runtime -d Kotlin/bin/Euler$1.jar
 java -jar Kotlin/bin/Euler$1.jar

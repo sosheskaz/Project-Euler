@@ -2,7 +2,7 @@
 
 mkdir -p /tmp/bin
 
-libs="/workspace/Kotlin/Sieve.kt"
+libs="/workspace/Kotlin/Sieve.kt /workspace/Kotlin/Combinatorics.kt"
 
 cd /workspace
 kotlinc /workspace/Kotlin/Euler$1.kt $libs -include-runtime -d /tmp/bin/Euler$1.jar

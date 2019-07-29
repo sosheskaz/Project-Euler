@@ -2,5 +2,5 @@
 
 cd /workspace
 
-GOLIBS=/workspace/Go/sieve.go
+GOLIBS="/workspace/Go/sieve.go /workspace/Go/combinatorics.go"
 go run /workspace/Go/Euler$1.go $GOLIBS

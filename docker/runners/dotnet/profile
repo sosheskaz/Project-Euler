@@ -1,0 +1,16 @@
+#!/bin/sh -e
+
+PROBLEM=$1
+COUNT=$2
+if [ -z "$COUNT" ]; then COUNT=1; fi
+
+if [ -d /tmp/build ]; then rm -rf /tmp/build; fi
+mkdir -p /tmp/build
+
+csdir="/workspace/CSharp/Euler$1"
+extras="/workspace/CSharp/Combinatorics"
+cp -R $csdir $extras /tmp/build
+
+cd /workspace
+dotnet build -o /tmp/build/bin /tmp/build/Euler$PROBLEM > /dev/null
+profilr -count $COUNT dotnet /tmp/build/bin/Euler$PROBLEM.dll

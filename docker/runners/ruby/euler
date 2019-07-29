@@ -1,4 +1,5 @@
 #!/bin/sh -e
+PROBLEM=$1
 
 cd /workspace
-ruby /workspace/Ruby/Euler$1.rb
+ruby /workspace/Ruby/Euler$PROBLEM.rb

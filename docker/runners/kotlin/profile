@@ -1,0 +1,12 @@
+#!/bin/sh -e
+PROBLEM=$1
+COUNT=$2
+if [ -z "$COUNT" ]; then COUNT=1; fi
+
+mkdir -p /tmp/bin
+
+libs="/workspace/Kotlin/Sieve.kt /workspace/Kotlin/Combinatorics.kt"
+
+cd /workspace
+kotlinc /workspace/Kotlin/Euler$PROBLEM.kt $libs -include-runtime -d /tmp/bin/Euler$PROBLEM.jar 2>/dev/null
+profilr -count $COUNT java -jar /tmp/bin/Euler$PROBLEM.jar

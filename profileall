@@ -1,0 +1,23 @@
+#!/bin/sh -e
+PROJECT_NAME=project-euler
+PROBLEM=$1
+COUNT=$2
+
+if [ -z "$COUNT" ]; then COUNT=1; fi
+
+cd "$(dirname $0)"
+
+PROJECT_FILTER="label=com.docker.compose.project=$PROJECT_NAME"
+RUNNING_FILTER="status=running"
+LANG_SELECTOR='{{.Label "com.docker.compose.service"}}'
+
+LANGS=$(docker container ls -f "$PROJECT_FILTER" -f "$RUNNING_FILTER" --format "$LANG_SELECTOR" || exit $?)
+
+# This makes it look a bit nicer when run in serial
+if which sort >> /dev/null; then
+    LANGS=$( (for lang in $LANGS; do echo $lang; done) | sort)
+fi
+
+for lang in $LANGS; do
+  ./profile $lang $PROBLEM | jq "{\"lang\": \"$lang\", \"Results\": .Results}"
+done

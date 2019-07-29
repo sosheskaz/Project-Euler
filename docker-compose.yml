@@ -10,66 +10,101 @@ services:
   dotnet:
     image: mcr.microsoft.com/dotnet/core/sdk:2.2
     volumes:
-      - ./:/workspace
+      - ./:/workspace:ro
+      - ./profilr/bin/profilr:/bin/profilr:ro
       - ./docker/runners/dotnet/euler:/bin/euler:ro
+      - ./docker/runners/dotnet/profile:/bin/profile:ro
     entrypoint: tail -f /dev/null
   go:
     image: golang:latest
     volumes:
       - ./:/workspace:ro
       - ./docker/runners/go/euler:/bin/euler:ro
+      - ./docker/runners/go/profile:/bin/profile:ro
+      - ./profilr/bin/profilr:/bin/profilr:ro
     entrypoint: tail -f /dev/null
   kotlin:
     image: zenika/kotlin:1.3-jdk12-alpine
     volumes:
       - ./:/workspace:ro
       - ./docker/runners/kotlin/euler:/bin/euler:ro
+      - ./docker/runners/kotlin/profile:/bin/profile:ro
+      - ./profilr/bin/profilr:/bin/profilr:ro
     entrypoint: tail -f /dev/null
+    user: ${PE_USER_ID}
   node:
     image: node:12-alpine
     volumes:
       - ./:/workspace:ro
       - ./docker/runners/node/euler:/bin/euler:ro
+      - ./docker/runners/node/profile:/bin/profile:ro
+      - ./profilr/bin/profilr:/bin/profilr:ro
     entrypoint: tail -f /dev/null
+    user: ${PE_USER_ID}
   node11:
     image: node:11-alpine
     volumes:
       - ./:/workspace:ro
       - ./docker/runners/node/euler:/bin/euler:ro
+      - ./docker/runners/node/profile:/bin/profile:ro
+      - ./profilr/bin/profilr:/bin/profilr:ro
     entrypoint: tail -f /dev/null
+    user: ${PE_USER_ID}
   node10:
     image: node:10-alpine
     volumes:
       - ./:/workspace:ro
       - ./docker/runners/node/euler:/bin/euler:ro
+      - ./docker/runners/node/profile:/bin/profile:ro
+      - ./profilr/bin/profilr:/bin/profilr:ro
     entrypoint: tail -f /dev/null
+    user: ${PE_USER_ID}
   py3:
     image: python:3-alpine
     volumes:
       - ./:/workspace:ro
       - ./docker/runners/python/euler:/bin/euler:ro
+      - ./docker/runners/python/profile:/bin/profile:ro
+      - ./profilr/bin/profilr:/bin/profilr:ro
     entrypoint: tail -f /dev/null
+    user: ${PE_USER_ID}
   py2:
     image: python:2-alpine
     volumes:
       - ./:/workspace:ro
       - ./docker/runners/python/euler:/bin/euler:ro
+      - ./docker/runners/python/profile:/bin/profile:ro
+      - ./profilr/bin/profilr:/bin/profilr:ro
     entrypoint: tail -f /dev/null
+    user: ${PE_USER_ID}
   pypy3:
     image: pypy:3-slim
     volumes:
       - ./:/workspace:ro
       - ./docker/runners/pypy/euler:/bin/euler:ro
+      - ./docker/runners/pypy/profile:/bin/profile:ro
+      - ./profilr/bin/profilr:/bin/profilr:ro
     entrypoint: tail -f /dev/null
+    user: ${PE_USER_ID}
   pypy2:
     image: pypy:2-slim
     volumes:
       - ./:/workspace:ro
       - ./docker/runners/pypy/euler:/bin/euler:ro
+      - ./docker/runners/pypy/profile:/bin/profile:ro
+      - ./profilr/bin/profilr:/bin/profilr:ro
     entrypoint: tail -f /dev/null
+    user: ${PE_USER_ID}
   ruby:
     image: ruby:2.6.0-alpine
     volumes:
       - ./:/workspace:ro
       - ./docker/runners/ruby/euler:/bin/euler:ro
+      - ./docker/runners/ruby/profile:/bin/profile:ro
+      - ./profilr/bin/profilr:/bin/profilr:ro
     entrypoint: tail -f /dev/null
+    user: ${PE_USER_ID}
+
+volumes:
+  dotnet:
+    driver: local

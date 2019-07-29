@@ -1,0 +1,13 @@
+#!/bin/sh -e
+
+PROBLEM=$1
+COUNT=$2
+GOLIBS="/workspace/Go/sieve.go /workspace/Go/combinatorics.go"
+
+if [ -z "$COUNT" ]; then COUNT=1; fi
+
+mkdir -p /tmp/bin
+
+go build -o /tmp/Euler$PROBLEM /workspace/Go/Euler$PROBLEM.go $GOLIBS
+cd /workspace
+profilr -count $COUNT /tmp/Euler$PROBLEM

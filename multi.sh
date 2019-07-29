@@ -13,7 +13,7 @@ kotlinval=$default
 fname="Euler$number"
 
 gofile="Go/$fname.go"
-golibs="Go/sieve.go"
+golibs="Go/sieve.go Go/combinatorics.go"
 
 groovyfile="Groovy/$fname.groovy"
 
@@ -25,7 +25,7 @@ csdir="CSharp/$fname"
 
 kotlincdir="Kotlin/bin"
 kotlinfile="Kotlin/$fname.kt"
-kotlinlibs="Kotlin/Sieve.kt"
+kotlinlibs=Kotlin/Sieve.kt /workspace/Kotlin/Combinatorics.kt
 kotlinbin="$kotlincdir/$fname.jar"
 
 chmod +x "$groovyfile" "$pythonfile" "$rubyfile" "$nodefile"> /dev/null 2>/dev/null
