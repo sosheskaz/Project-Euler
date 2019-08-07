@@ -7,9 +7,8 @@ import (
 
 func main() {
 	const target = 28123
-	// fmt.Println(isAbundant(12))
 	abundants := abundantNumbers(target)
-	abundantPairs, err := CombinationsWithReplacement(*abundants, 2)
+	abundantPairs, err := GetCombinationsWithReplacement(abundants, 2)
 	if err != nil {
 		fmt.Println(fmt.Errorf("Error: %+v", err))
 		os.Exit(1)
@@ -44,7 +43,7 @@ func main() {
 	fmt.Println(sumOfNonAbundantSums)
 }
 
-func abundantNumbers(upTo int) *[]int {
+func abundantNumbers(upTo int) []int {
 	var abundants []int
 
 	for i := 1; i <= upTo; i++ {
@@ -53,7 +52,7 @@ func abundantNumbers(upTo int) *[]int {
 		}
 	}
 
-	return &abundants
+	return abundants
 }
 
 func isAbundant(n int) bool {

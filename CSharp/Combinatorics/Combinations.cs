@@ -21,18 +21,28 @@ namespace Combinatorics
             return numer / denom;
         }
 
-        public static IEnumerable<IEnumerable<T>> GetCombinationsWithReplacement<T>(List<T> l, int count) {
-            if (count < 1) {
-                return new List<List<T>>();
-            }
+        public static IEnumerable<IList<T>> GetCombinationsWithReplacement<T>(IList<T> pool, int r) {
+            var n = pool.Count();
+            var indices = Enumerable.Range(0, r).Select(_ => 0).ToArray();
+            int i = 0;
 
-            if (count == 1) {
-                return from i in l select new T[]{i};
-            } else {
-                return l.AsParallel()
-                    .Select(
-                        (item, index) => GetCombinationsWithReplacement(l.GetRange(index, l.Count - index), count - 1).Select(combo => combo.Concat(new T[]{item}))
-                    ).SelectMany(x => x.ToList());
+            var current = indices.Select((idx) => pool[idx]).ToList();
+            yield return current;
+
+            for (;;)
+            {
+                i = r - 1 - Enumerable.Range(1, r).Select(x => r - x).TakeWhile(idx => indices[idx] == n - 1).Count();
+                if (i < 0)
+                    break;
+
+                indices[i]++;
+
+                for (var idx = i + 1; idx < r; idx++) {
+                    indices[idx] = indices[i];
+                }
+
+                current = indices.Select(idx => pool[idx]).ToList();
+                yield return current;
             }
         }
     }

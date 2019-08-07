@@ -1,17 +1,26 @@
 package Combinatorics
 
-fun <T> combinationsWithReplacement(list: List<T>, count: Int): Sequence<List<T>> {
-  if (count < 1) {
-    throw Exception("Error: Argument 'count' cannot be less than 1, got: " + count)
-  } else if (count == 1) {
-    return list.asSequence().map { i -> listOf(i) }
-  } else {
-    return sequence {
-      for ((idx, item) in list.asSequence().withIndex()) {
-        for (baseResult in combinationsWithReplacement(list.slice(idx..(list.size - 1)), count - 1)) {
-          yield(baseResult + listOf(item))
-        }
-      }
+fun <T> combinationsWithReplacement(pool: List<T>, r: Int): Sequence<List<T>> {
+  val n = pool.size
+  var indices = IntArray(r)
+  indices.fill(0)
+
+  return sequence<List<T>> {
+    var current = indices.map { pool[it] }
+    var i: Int
+
+    yield(current)
+
+    while (true) {
+      i = r - 1 - (r - 1 downTo 0).takeWhile { indices[it] == n - 1 }.size
+
+      if (0 > i) break
+
+      indices[i]++
+
+      indices.fill(indices[i], i)
+      current = indices.map { pool[it] }
+      yield(current)
     }
   }
 }

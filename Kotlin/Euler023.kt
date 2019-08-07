@@ -1,18 +1,17 @@
 package Euler023
 
-import java.lang.Math
 import Combinatorics.combinationsWithReplacement
 
 fun main() {
   val target = 28123
-  // println(isAbundant(12))
-  val abundants = abundantNumbers().takeWhile { it <= target }.toList()
+  val abundants = abundantNumbers().takeWhile { target >= it }.toList()
 
   val abundantSums = combinationsWithReplacement(abundants, 2)
     .map { it.sum() }
-    .filter { it <= target }
+    .filter { target >= it }
     .distinct()
 
+  // .sum() collapses the generator, so it eats a lot of memory because Java
   val sumOfAbundantSums = abundantSums.sum()
   val sumOfAll = (target + 1) / 2 * target
   val sumOfNonAbundants = sumOfAll - sumOfAbundantSums
@@ -30,7 +29,7 @@ fun isAbundant(n: Int): Boolean {
 fun getFactors(n: Int): Sequence<Int> {
   val seq = sequence {
     yield(1)
-    val potentialFactorSequence = generateSequence(2) { it + 1 }.takeWhile { it * it <= n }
+    val potentialFactorSequence = generateSequence(2) { it + 1 }.takeWhile { n >= it * it }
     for (i in potentialFactorSequence) {
       if (n % i == 0) {
         yield(i)
