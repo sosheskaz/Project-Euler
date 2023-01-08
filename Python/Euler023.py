@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from itertools import takewhile, combinations_with_replacement
+from itertools import count, takewhile, combinations_with_replacement
 import math
 import sys
 if sys.version.startswith('2'):
@@ -22,11 +22,7 @@ def main():
 
 
 def abundant_numbers():
-    n = 1
-    while True:
-        if is_abundant(n):
-            yield n
-        n += 1
+    return (n for n in count(1) if is_abundant(n))
 
 
 def is_abundant(n):
